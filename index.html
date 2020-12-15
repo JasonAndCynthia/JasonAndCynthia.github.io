@@ -66,10 +66,23 @@
 
 <!--计时器js-->
       <script>
+        function changeTimezone(date, ianatz) {
+            // suppose the date is 12:00 UTC
+            var invdate = new Date(date.toLocaleString('en-US', {
+            timeZone: ianatz
+            }));
+            // then invdate will be 07:00 in Toronto
+            // and the diff is 5 hours
+            var diff = date.getTime() - invdate.getTime();
+
+            // so 12:00 in Toronto is 17:00 UTC
+            return new Date(date.getTime() - diff); // needs to substract
+        }  
+          
         function timer() {
         window.setTimeout("timer()", 1000);
         var start = new Date("2010-05-10 00:00:00");
-        var t = new Date().getTime() - start;
+        var t = changeTimezone(new Date(), 'Asia/Shanghai').getTime() - start;
         var h = ~~(t / 1000 / 60 / 60 % 24);
         if (h < 10) {h = "0" + h;}
         var m = ~~(t / 1000 / 60 % 60);
